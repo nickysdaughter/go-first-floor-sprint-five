@@ -28,13 +28,16 @@ type Training struct {
 // количество_повторов * длина_шага / м_в_км
 func (t Training) distance() float64 {
 	// вставьте ваш код ниже
-	dist := t.Action / MInKm
-	return float64(dist)
+	dist := float64(t.Action) * t.LenStep / MInKm
+	return dist
 }
 
 // meanSpeed возвращает среднюю скорость бега или ходьбы.
 func (t Training) meanSpeed() float64 {
 	// вставьте ваш код ниже
+	if t.Duration == 0 {
+		return 0
+	}
 	avgSpeed := t.distance() / t.Duration.Hours()
 	return avgSpeed
 }
@@ -139,8 +142,8 @@ type Walking struct {
 func (w Walking) Calories() float64 {
 	// вставьте ваш код ниже
 	avgSpeedInMsec := w.meanSpeed() * KmHInMsec
-	ccal := CaloriesWeightMultiplier*w.Weight + (math.Pow(avgSpeedInMsec, 2)/w.Height/CmInM)*CaloriesSpeedHeightMultiplier*w.Weight*w.Duration.Hours()*MinInHours
-	return ccal
+	cal := CaloriesSpeedHeightMultiplier*w.Weight + ((math.Pow(avgSpeedInMsec, 2)/(w.Height/CmInM))*CaloriesSpeedHeightMultiplier*w.Weight)*w.Duration.Hours()*MinInHours
+	return cal
 }
 
 // TrainingInfo возвращает структуру InfoMessage с информацией о проведенной тренировке.
@@ -171,6 +174,9 @@ type Swimming struct {
 // Это переопределенный метод Calories() из Training.
 func (s Swimming) meanSpeed() float64 {
 	// вставьте ваш код ниже
+	if s.Duration == 0 {
+		return 0
+	}
 	avgSpeed := float64(s.LengthPool*s.CountPool) / MInKm / s.Duration.Hours()
 	return avgSpeed
 }
@@ -181,10 +187,6 @@ func (s Swimming) meanSpeed() float64 {
 // Это переопределенный метод Calories() из Training.
 func (s Swimming) Calories() float64 {
 	// вставьте ваш код ниже
-	/*
-		(средняя_скорость_в_км/ч + SwimmingCaloriesMeanSpeedShift) * SwimmingCaloriesWeightMultiplier
-		* вес_спортсмена_в_кг * время_тренеровки_в_часах
-	*/
 	ccal := (s.meanSpeed() + SwimmingCaloriesMeanSpeedShift) * SwimmingCaloriesWeightMultiplier * s.Weight * s.Duration.Hours()
 	return ccal
 }

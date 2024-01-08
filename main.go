@@ -142,7 +142,7 @@ type Walking struct {
 func (w Walking) Calories() float64 {
 	// вставьте ваш код ниже
 	avgSpeedInMsec := w.meanSpeed() * KmHInMsec
-	cal := CaloriesSpeedHeightMultiplier*w.Weight + ((math.Pow(avgSpeedInMsec, 2)/(w.Height/CmInM))*CaloriesSpeedHeightMultiplier*w.Weight)*w.Duration.Hours()*MinInHours
+	cal := CaloriesWeightMultiplier*w.Weight + ((math.Pow(avgSpeedInMsec, 2)/(w.Height/CmInM))*CaloriesSpeedHeightMultiplier*w.Weight)*w.Duration.Hours()*MinInHours
 	return cal
 }
 

@@ -108,7 +108,6 @@ type Running struct {
 // Это переопределенный метод Calories() из Training.
 func (r Running) Calories() float64 {
 	// вставьте ваш код ниже
-	//((CaloriesMeanSpeedMultiplier * средняя_скорость_в_км/ч + CaloriesMeanSpeedShift) * вес_спортсмена_в_кг / MInKm * время_тренировки_в_часах * MinInHour
 	ccal := (CaloriesMeanSpeedMultiplier*r.meanSpeed() + CaloriesMeanSpeedShift) * r.Weight / MInKm * r.Duration.Hours() * MinInHours
 	return ccal
 }
@@ -142,7 +141,9 @@ type Walking struct {
 func (w Walking) Calories() float64 {
 	// вставьте ваш код ниже
 	avgSpeedInMsec := w.meanSpeed() * KmHInMsec
-	cal := CaloriesWeightMultiplier*w.Weight + ((math.Pow(avgSpeedInMsec, 2)/(w.Height/CmInM))*CaloriesSpeedHeightMultiplier*w.Weight)*w.Duration.Hours()*MinInHours
+	cal := (CaloriesWeightMultiplier*w.Weight + (math.Pow(avgSpeedInMsec, 2)/
+		(w.Height/CmInM))*CaloriesSpeedHeightMultiplier*w.Weight) *
+		w.Duration.Hours() * MinInHours
 	return cal
 }
 
